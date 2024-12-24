@@ -1,0 +1,161 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define MAXN 100001
+
+//pomocna
+void printaj(char mapa[130][130]){
+    printf("Novi korak\n");
+    for (int i = 0; i < 130; ++i)
+    {
+        for (int j = 0; j < 130 ; ++j)
+        {
+            printf("%c",mapa[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+//brute force blokade (ako se vrti vise od 10 000 puta pretpostavimo da je u loopu)
+int is_loop(char mapa[130][130],int x, int y,char dir){
+    int ctr = 0;
+    while(x<130 && y<130 && y>=0 && x>=0 && ctr<=10000){
+        ctr++;
+        switch(dir){
+            case '^':
+                if (x-1>=0 && mapa[x-1][y]=='#')
+                {
+                    dir = '>';
+                    break;
+                }else{
+                    x--;
+                }
+            break;
+            case '>':
+                if (y+1 < 130 && mapa[x][y+1]=='#')
+                {
+                    dir = 'v';
+                    break;
+                }else{
+                    y++;
+                }
+            break;
+            case '<':
+                if (y-1 >=0 && mapa[x][y-1]=='#')
+                {
+                    dir = '^';
+                    break;
+                }else{
+                    y--;
+                }
+            break;
+            case 'v':
+                if (x+1 < 130 && mapa[x+1][y]=='#')
+                {
+                    dir = '<';
+                    break;
+                }else{
+                    x++;
+                }
+            break;
+        }
+    }
+
+    if (ctr>=10000)
+    {
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+int main() {
+    char mapa[130][130];
+    int x;
+    int y;
+    char dir = '^';
+    int sum_posjeta = 0;
+    int broj_blokada = 0;
+
+    for (int i = 0; i < 130; ++i)
+    {
+        for (int j = 0; j < 130 ; ++j)
+        {
+            scanf("%c",&mapa[i][j]);
+            if (mapa[i][j]=='^')
+            {
+                x = i;
+                y = j;
+            }
+        }
+        scanf("\n");
+    }
+
+    //brute force stavlja na svako mjesto blokadu
+    for (int i = 0; i < 130 ; ++i)
+    {
+        for (int j = 0; j < 130 ; ++j)
+        {
+            if (mapa[i][j]!='#' && mapa[i][j]!='^')
+            {
+                char save = mapa[i][j];
+                mapa[i][j]= '#';
+                broj_blokada+=is_loop(mapa,x,y,dir);
+                mapa[i][j]=save;
+            }
+        }
+    }
+    cout << broj_blokada << '\n';
+    
+
+
+    //1 dio zadatka
+    while(x<130 && y<130 && y>=0 && x>=0){
+        if (mapa[x][y]!='X')
+        {
+            mapa[x][y]='X'; //oznacuje posjecene sa X
+            sum_posjeta++;
+        }
+        switch(dir){
+            case '^':
+                if (x-1>=0 && mapa[x-1][y]=='#')
+                {
+                    dir = '>';
+                    break;
+                }else{
+                    x--;
+                }
+            break;
+            case '>':
+                if (y+1 < 130 && mapa[x][y+1]=='#')
+                {
+                    dir = 'v';
+                    break;
+                }else{
+                    y++;
+                }
+            break;
+            case '<':
+                if (y-1 >=0 && mapa[x][y-1]=='#')
+                {
+                    dir = '^';
+                    break;
+                }else{
+                    y--;
+                }
+            break;
+            case 'v':
+                if (x+1 < 130 && mapa[x+1][y]=='#')
+                {
+                    dir = '<';
+                    break;
+                }else{
+                    x++;
+                }
+            break;
+        }
+    }
+    cout << sum_posjeta;
+    return 0;
+}

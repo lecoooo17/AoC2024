@@ -1,0 +1,135 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+using namespace std;
+
+vector<int> parseLine(const string& line) {
+    vector<int> numbers;
+    string number;
+    
+    for (char c : line) {
+        if (c != ',') {
+            number += c;  // Build the number string
+        } else {
+            if (!number.empty()) {
+                numbers.push_back(stoi(number));  // Convert and store
+                number.clear();  // Reset for the next number
+            }
+        }
+    }
+    
+    // Add the last number in the string
+    if (!number.empty()) {
+        numbers.push_back(stoi(number));
+    }
+
+    return numbers;
+}
+
+
+
+int main() {
+    //1176 2
+    int rules[1176][2];
+
+    for (int i = 0; i < 1176; ++i)
+    {
+        scanf("%d|%d\n",&rules[i][0],&rules[i][1]);
+        //cout << rules[i][0] << " " << rules[i][1] << '\n';
+    }
+    scanf("\n");
+
+    string order;
+    vector<int> order_int;
+    int len;
+    int ispravan;
+    int sumt = 0;
+    int sumn = 0;
+    //174
+    for (int i = 0; i < 174; ++i)
+    {
+        ispravan = 1;
+        cin >> order;
+        order_int = parseLine(order);
+        len = order_int.size();
+        for (int j = 0; j < len; ++j)
+        {
+            for (int q = 0; q < 1176; ++q)
+            {
+                int prije = rules[q][0];
+                int poslije = rules[q][1];
+                if (order_int[j]==prije)
+                {
+                    for (int w = 0; w < j; ++w)
+                    {
+                        if (order_int[w]==poslije)
+                        {
+                            ispravan=0;
+                        }
+                    }
+                }
+                if (order_int[j]==poslije)
+                {
+                    for (int w = j; w < len ; ++w)
+                    {
+                        if (order_int[w]==prije)
+                        {
+                            ispravan=0;
+                        }
+                    }
+                }
+            }
+        }
+        if (ispravan==1)
+        {
+            int mid = len/2;
+            sumt+=order_int[mid];
+        }else{
+            while(ispravan==0){
+                ispravan = 1;    
+                for (int j = 0; j < len; ++j)
+                {
+                    for (int q = 0; q < 1176; ++q)
+                    {
+                        int prije = rules[q][0];
+                        int poslije = rules[q][1];
+                        if (order_int[j]==prije)
+                        {
+                            for (int w = 0; w < j; ++w)
+                            {
+                                if (order_int[w]==poslije)
+                                {
+                                    ispravan=0;
+                                    int tmp = order_int[j];
+                                    order_int[j] = order_int[w];
+                                    order_int[w] = tmp;
+    
+                                }
+                            }
+                        }
+                        if (order_int[j]==poslije)
+                        {
+                            for (int w = j; w < len ; ++w)
+                            {
+                                if (order_int[w]==prije)
+                                {
+                                    ispravan=0;
+                                    int tmp = order_int[j];
+                                    order_int[j] = order_int[w];
+                                    order_int[w] = tmp;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            int mid = len/2;
+            sumn+=order_int[mid];
+        }
+    }
+    cout<<sumt << "\n";
+    cout<<sumn;
+
+    return 0;
+}

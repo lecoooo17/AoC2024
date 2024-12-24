@@ -1,0 +1,103 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    char arr[19999];
+    int arri[1000000] = {0};  
+
+    
+    for (int i = 0; i < 19999; ++i) {
+        cin >> arr[i];  
+    }
+
+    
+
+    cout << endl;
+
+    int current_index = 0;
+    int indexes = 0;
+
+    // Process the input array
+    for (int i = 0; i < 19999; ++i) {
+        int count = arr[i] - '0';  
+
+        if (i % 2 == 0) {
+            
+            for (int j = 0; j < count; ++j) {
+                arri[current_index++] = indexes;  
+            }
+            indexes++;
+        } else {
+            
+            for (int j = 0; j < count; ++j) {
+                arri[current_index++] = -1;
+            }
+        }
+    }
+    int sirinar;
+    int sirina;
+    int num;
+    int pocetaknum;
+
+    for (int i = current_index-1; i>= 0; --i)
+    {
+        if (arri[i]!=-1)
+        {
+            sirina = 0;
+            num = arri[i];
+            pocetaknum = i;
+            while(arri[i]==num){
+                sirina++;
+                i--;
+            }
+            i++;
+            //cout << sirina << " " << num;
+            for (int j = 0; j < current_index; ++j)
+            {
+                if (arri[j]==-1)
+                {
+                    int pocetak = j;
+                    sirinar = 0;
+                    while(arri[j]==-1){
+                        sirinar++;
+                        j++;
+                    }
+                    //cout << "sirinar" << sirinar << '\n';
+                    if (sirinar>=sirina && j-1<i+1)
+                    {
+                        for (int w = pocetaknum; w > pocetaknum-sirina ; --w)
+                        {
+                            arri[pocetak] = num;
+                            pocetak++;
+                            arri[w] = -1;
+                        }
+/*                        for (int o = 0; o < current_index; ++o) {
+                            if (arri[o] == -1)
+                                cout << ".";
+                            else
+                                cout << arri[o];
+                        }
+                        cout << '\n';*/
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    cout << endl;
+
+
+    long long rez = 0;
+
+    for (int i = 0; i < current_index; ++i)
+    {
+        if (arri[i]==-1)
+        {
+            continue;
+        }
+        rez += i * arri[i];
+    }
+    cout << rez;
+    return 0;
+}

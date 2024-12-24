@@ -1,0 +1,115 @@
+#include <iostream>
+using namespace std;
+
+#define m  50
+#define n  50
+
+void ispis(char mapa[][m]){
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < m ; ++j)
+        {
+            cout << mapa[i][j];
+        }
+        cout << '\n';
+    }
+}
+
+void findpairs(char mapa[][m],int startx, int starty,char type, char hotspots[][m]){
+    int inci;
+    int incj;
+
+    for (int i = 0; i < n ; ++i)
+    {
+        for (int j = 0; j < m ; ++j)
+        {
+            if (i < startx || (i == startx && j < starty)) {
+                continue;
+            }
+            if (mapa[i][j]==type)
+            {
+                int difx = abs(i-startx);
+                int dify = abs(j-starty);
+                if (i>startx && j>starty)
+                {
+                    inci = startx;
+                    incj = starty;
+                    hotspots[inci][incj] = '#';
+                    while(inci+difx < n && incj+dify < m){
+                        hotspots[inci+difx][incj+dify]='#';
+                        inci+=difx;
+                        incj+=dify;
+                    }
+                    inci = i;
+                    incj = j;
+                    while(inci-difx >= 0 && incj-dify >= 0){
+                        hotspots[inci-difx][incj-dify]='#';
+                        inci-=difx;
+                        incj-=dify;
+                    }
+                }else if (i>startx && j<starty)
+                {
+                    inci = startx;
+                    incj = starty;
+                    hotspots[inci][incj] = '#';
+                    while(inci+difx < n && incj-dify >= 0){
+                        hotspots[inci+difx][incj-dify]='#';
+                        inci+=difx;
+                        incj-=dify;
+                    }
+                    inci = i;
+                    incj = j;
+                    hotspots[inci][incj] = '#';
+                    while(inci-difx >= 0 && incj+dify < m){
+                        hotspots[inci-difx][incj+dify]='#';
+                        inci-=difx;
+                        incj+=dify;
+                    }
+                }
+            }
+        }
+    }
+}
+
+int main() {
+
+    char mapa[n][m];
+    char hotspots[n][m];
+
+    for (int i = 0; i < n ; ++i)
+    {
+        for (int j = 0;j < m; ++j)
+        {
+                scanf(" %c",&mapa[i][j]);
+                hotspots[i][j]='.';
+        }
+        scanf("\n");
+    }
+
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < m; ++j)
+        {
+            if (mapa[i][j]!='.')
+            {
+                char type = mapa[i][j];
+                findpairs(mapa,i,j,type,hotspots);
+            }
+        }
+    }
+    ispis(hotspots);
+    int no = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < m; ++j)
+        {
+            if (hotspots[i][j]=='#')
+            {
+               no++; 
+            }
+        }
+    }
+    cout << no;
+
+    return 0;
+}
