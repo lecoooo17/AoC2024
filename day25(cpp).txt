@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+int main() {
+    char brava[500][7][5];
+
+
+
+    for (int r = 0; r < 500; ++r)
+    {
+        for (int i = 0; i < 7; ++i)
+        {
+            for (int j = 0; j < 5; ++j)
+            {
+                cin >> brava[r][i][j];
+            }
+        }
+    }
+    int ispravan;
+    int sumi = 0;
+    for (int q = 0; q < 500; ++q)
+    {
+        for (int e = q+1; e < 500; ++e)
+        {
+            ispravan = 1;
+            for (int i = 0; i < 7; ++i)
+            {
+                for (int j = 0; j < 5; ++j)
+                {
+                    if (brava[q][i][j]=='#' && brava[e][i][j]=='#')
+                    {
+                        ispravan = 0;
+                    }
+                }
+            }
+            if (ispravan)
+            {
+                sumi++;
+            }
+        }
+    }
+    cout << sumi;
+
+}
